@@ -455,7 +455,7 @@ def --env theme [name?: string] {
     }
     theme-apply $choice
     $choice | save -f (theme-state-path)
-    print $"(ansi green_bold)✓(ansi reset) theme set to (ansi attr_bold)($choice)(ansi reset) (ansi grey)(pinned)(ansi reset)"
+    print $"(ansi green_bold)✓(ansi reset) theme set to (ansi attr_bold)($choice)(ansi reset) (ansi grey)\(pinned\)(ansi reset)"
     # When picked interactively, also choose a matching prompt style.
     if ($name | is-empty) {
         let s = (prompt-styles | input list --fuzzy $"prompt style for ($choice)  \(esc to keep ($env.PROMPT_STYLE? | default 'full')\)")
@@ -556,7 +556,7 @@ def --env theme-sync [] {
     }
     theme-apply $g
     "auto" | save -f (theme-state-path)
-    print $"(ansi green_bold)✓(ansi reset) synced to Ghostty theme (ansi attr_bold)($g)(ansi reset) (ansi grey)(auto-follow on)(ansi reset)"
+    print $"(ansi green_bold)✓(ansi reset) synced to Ghostty theme (ansi attr_bold)($g)(ansi reset) (ansi grey)\(auto-follow on\)(ansi reset)"
 }
 
 # Startup theme selection:
