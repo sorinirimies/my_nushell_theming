@@ -8,12 +8,13 @@ Works on **macOS** and **Linux**.
 
 ## Features
 
-- **5 color themes**: `gruvbox`, `catppuccin-mocha`, `catppuccin-macchiato`,
-  `catppuccin-frappe`, `catppuccin-latte`. Themes recolor syntax highlighting,
-  tables **and** the prompt.
-- **Ghostty is the source of truth** (optional): on startup the theme is read
-  from your Ghostty config (`theme = …`) and matched automatically. Falls back
-  to your last manual choice, then `gruvbox`.
+- **6 color themes**: `gruvbox`, `catppuccin-mocha`, `catppuccin-macchiato`,
+  `catppuccin-frappe`, `catppuccin-latte`, and a neon **`cyberpunk`**. Themes
+  recolor syntax highlighting, tables **and** the prompt.
+- **Ghostty auto-follow** (optional): by default the theme follows your Ghostty
+  config (`theme = …`), matched automatically. Pick a theme manually with
+  `theme <name>` to **pin** it (survives new shells); `theme-sync` re-enables
+  auto-follow.
 - **7 prompt styles**: `full`, `compact`, `minimal`, `lambda`, `pure`,
   `powerline`, `cyberpunk`.
 - **oh-my-zsh style git info**: branch, `⇡`ahead `⇣`behind `=`conflict
@@ -32,12 +33,20 @@ Works on **macOS** and **Linux**.
 
 ## Install
 
+Requires [Nushell](https://www.nushell.sh) — the installer is pure Nushell,
+no bash needed.
+
 ```sh
 git clone https://github.com/sorinirimies/my_nushell_theming
 cd my_nushell_theming
-./install.sh            # symlink (repo stays the source of truth)
-# or:  ./install.sh --copy
-# or:  nu install.nu
+nu install.nu            # symlink (repo stays the source of truth)
+# or:  nu install.nu --copy
+```
+
+One-liner (no clone needed):
+
+```sh
+nu -c "let d = (mktemp -d); http get https://raw.githubusercontent.com/sorinirimies/my_nushell_theming/main/install.nu | save ($d | path join install.nu); nu ($d | path join install.nu)"
 ```
 
 Open a new shell (or `exec nu`). That's it.
@@ -46,12 +55,19 @@ To update: `git pull` (if you symlinked, changes apply on next shell).
 
 To remove: `nu uninstall.nu`.
 
+## Full cyberpunk mode
+
+```nu
+theme cyberpunk          # neon colors (pinned across shells)
+prompt-style cyberpunk   # two-line neon layout with ⚡ and ▶▶▶
+```
+
 ## Usage
 
 ```nu
 theme                 # interactive theme picker (fuzzy)
-theme catppuccin-mocha
-theme-sync            # re-adopt the current Ghostty theme
+theme cyberpunk       # pin a theme
+theme-sync            # re-enable Ghostty auto-follow
 theme-list
 
 prompt-style          # interactive style picker

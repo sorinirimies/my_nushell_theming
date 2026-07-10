@@ -1,30 +1,47 @@
 #!/usr/bin/env nu
-# install.nu — link (or copy) the nushell prompt+theme into your autoload dir.
+# install.nu — cross-platform deploy for my_nushell_theming.
+# Pure Nushell; works anywhere Nushell runs (macOS / Linux / Windows / WSL).
 #
-#   nu install.nu           # symlink (repo stays the source of truth)
-#   nu install.nu --copy    # copy the files instead of symlinking
+# From a clone:
+#   nu install.nu            # symlink (repo stays the source of truth)
+#   nu install.nu --copy     # copy instead of symlinking
 #
-# Works on macOS and Linux. Requires Nushell >= 0.101.
+# One-liner (no clone needed):
+#   nu -c "let d = (mktemp -d); http get https://raw.githubusercontent.com/sorinirimies/my_nushell_theming/main/install.nu | save ($d | path join install.nu); nu ($d | path join install.nu)"
+
+const REPO_URL = "https://github.com/sorinirimies/my_nushell_theming.git"
+const FILE = "nushell-prompt.nu"
+
+# Find the source file next to this script, or clone the repo if run standalone.
+def resolve-source []: nothing -> string {
+    let here = ($env.FILE_PWD | path join $FILE)
+    if ($here | path exists) { return $here }
+    let cache = ($env.XDG_CACHE_HOME? | default ($env.HOME | path join ".cache") | path join "my_nushell_theming")
+    print $"(ansi cyan)fetching(ansi reset) ($REPO_URL) ..."
+    rm -rf $cache
+    ^git clone --depth 1 $REPO_URL $cache
+    $cache | path join $FILE
+}
 
 def main [--copy] {
-    let repo = $env.FILE_PWD
-    let s = ($repo | path join "nushell-prompt.nu")
+    let src = (resolve-source)
     let dest = ($nu.user-autoload-dirs | get 0)
-    let d = ($dest | path join "nushell-prompt.nu")
+    let target = ($dest | path join $FILE)
 
     mkdir $dest
-    print $"(ansi green_bold)nushell-prompt(ansi reset) → ($dest)"
+    print $"(ansi green_bold)my_nushell_theming(ansi reset) → ($dest)"
 
-    if (($d | path exists) or ($d | path type) == "symlink") { rm -f $d }
+    if (($target | path exists) or (($target | path type) == "symlink")) { rm -f $target }
     if $copy {
-        cp $s $d
-        print $"  (ansi cyan)copied(ansi reset)  nushell-prompt.nu"
+        cp $src $target
+        print $"  (ansi cyan)copied(ansi reset)  ($FILE)"
     } else {
-        ^ln -s $s $d
-        print $"  (ansi cyan)linked(ansi reset)  nushell-prompt.nu -> ($s)"
+        ^ln -s $src $target
+        print $"  (ansi cyan)linked(ansi reset)  ($FILE) -> ($src)"
     }
 
     print ""
     print $"(ansi green_bold)✓ installed.(ansi reset) Open a new shell, or run: (ansi attr_bold)exec nu(ansi reset)"
-    print "Commands: theme · theme-sync · prompt-style"
+    print "Try:  theme cyberpunk   ·   prompt-style cyberpunk"
+    print "Also: theme · theme-sync · prompt-style"
 }

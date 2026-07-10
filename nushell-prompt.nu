@@ -222,9 +222,80 @@ def gruvbox-color-config [] {
     }
 }
 
+# ── Cyberpunk (neon) ──────────────────────────────────────────
+const NEON = {
+    fg: "#eaf2ff", gray: "#6c5b8c", pink: "#ff2a6d", cyan: "#05d9e8"
+    magenta: "#ff5cf4", green: "#00ff9f", yellow: "#f9f871", violet: "#a97bff"
+    orange: "#ff8b39", bg: "#0b0221"
+}
+
+def neon-color-config [] {
+    let n = $NEON
+    {
+        separator: { fg: $n.magenta }
+        leading_trailing_space_bg: { attr: n }
+        header: { fg: $n.cyan attr: b }
+        empty: $n.violet
+        bool: $n.green
+        int: $n.magenta
+        filesize: $n.cyan
+        duration: $n.magenta
+        date: $n.yellow
+        range: $n.fg
+        float: $n.magenta
+        string: $n.green
+        nothing: $n.gray
+        binary: $n.orange
+        cell-path: $n.cyan
+        row_index: { fg: $n.cyan attr: b }
+        record: $n.fg
+        list: $n.fg
+        block: $n.fg
+        hints: $n.gray
+        search_result: { fg: $n.bg bg: $n.pink }
+        shape_and: { fg: $n.magenta attr: b }
+        shape_binary: { fg: $n.magenta attr: b }
+        shape_block: { fg: $n.cyan attr: b }
+        shape_bool: $n.green
+        shape_closure: { fg: $n.cyan attr: b }
+        shape_custom: $n.green
+        shape_datetime: { fg: $n.cyan attr: b }
+        shape_directory: $n.cyan
+        shape_external: $n.cyan
+        shape_externalarg: { fg: $n.green attr: b }
+        shape_external_resolved: { fg: $n.yellow attr: b }
+        shape_filepath: $n.cyan
+        shape_flag: { fg: $n.yellow attr: b }
+        shape_float: { fg: $n.magenta attr: b }
+        shape_glob_interpolation: { fg: $n.cyan attr: b }
+        shape_globpattern: { fg: $n.cyan attr: b }
+        shape_int: { fg: $n.magenta attr: b }
+        shape_internalcall: { fg: $n.cyan attr: b }
+        shape_keyword: { fg: $n.pink attr: b }
+        shape_list: { fg: $n.cyan attr: b }
+        shape_literal: $n.violet
+        shape_match_pattern: $n.green
+        shape_matching_brackets: { attr: u }
+        shape_nothing: $n.gray
+        shape_operator: $n.pink
+        shape_or: { fg: $n.magenta attr: b }
+        shape_pipe: { fg: $n.pink attr: b }
+        shape_range: { fg: $n.orange attr: b }
+        shape_record: { fg: $n.cyan attr: b }
+        shape_redirection: { fg: $n.pink attr: b }
+        shape_signature: { fg: $n.green attr: b }
+        shape_string: $n.green
+        shape_string_interpolation: { fg: $n.cyan attr: b }
+        shape_table: { fg: $n.cyan attr: b }
+        shape_variable: $n.violet
+        shape_vardecl: $n.violet
+        shape_garbage: { fg: $n.bg bg: $n.pink attr: b }
+    }
+}
+
 # ── Public API ────────────────────────────────────────────────
 def theme-list [] {
-    ["gruvbox" "catppuccin-mocha" "catppuccin-macchiato" "catppuccin-frappe" "catppuccin-latte"]
+    ["gruvbox" "catppuccin-mocha" "catppuccin-macchiato" "catppuccin-frappe" "catppuccin-latte" "cyberpunk"]
 }
 
 def theme-get [name: string] {
@@ -233,6 +304,16 @@ def theme-get [name: string] {
         "catppuccin-macchiato" => { color_config: (cat-color-config $CAT_MACCHIATO) palette: (cat-prompt-palette $CAT_MACCHIATO) }
         "catppuccin-frappe"    => { color_config: (cat-color-config $CAT_FRAPPE)    palette: (cat-prompt-palette $CAT_FRAPPE) }
         "catppuccin-latte"     => { color_config: (cat-color-config $CAT_LATTE)     palette: (cat-prompt-palette $CAT_LATTE) }
+        "cyberpunk" => {
+            color_config: (neon-color-config)
+            palette: {
+                user: $NEON.yellow, host: $NEON.pink, path: $NEON.cyan, git: $NEON.magenta
+                sep: $NEON.gray, ok: $NEON.green, err: $NEON.pink, time: $NEON.violet
+                added: $NEON.green, modified: $NEON.yellow, deleted: $NEON.pink, untracked: $NEON.gray
+                ahead: $NEON.cyan, behind: $NEON.orange, stash: $NEON.magenta, conflict: $NEON.pink
+                duration: $NEON.orange, ink: $NEON.bg
+            }
+        }
         _ => {
             color_config: (gruvbox-color-config)
             palette: {
@@ -331,17 +412,20 @@ def --env theme-sync [] {
         return
     }
     theme-apply $g
-    print $"(ansi green_bold)✓(ansi reset) synced to Ghostty theme (ansi attr_bold)($g)(ansi reset)"
+    "auto" | save -f (theme-state-path)
+    print $"(ansi green_bold)✓(ansi reset) synced to Ghostty theme (ansi attr_bold)($g)(ansi reset) (ansi grey)(auto-follow on)(ansi reset)"
 }
 
-# Startup: Ghostty decides the theme. Fall back to the last manual
-# choice, then to gruvbox, when Ghostty's theme can't be detected.
-let ghostty_theme = (ghostty-theme-name)
-let saved_theme = (try { open (theme-state-path) | str trim } catch { "gruvbox" })
+# Startup theme selection:
+#   • a pinned theme (a saved theme name) wins — keeps e.g. cyberpunk
+#   • "auto" / no pin / invalid → follow Ghostty, else fall back to gruvbox
+let saved_theme = (try { open (theme-state-path) | str trim } catch { "auto" })
 let start_theme = (
-    if ($ghostty_theme | is-not-empty) { $ghostty_theme }
-    else if ($saved_theme in (theme-list)) { $saved_theme }
-    else { "gruvbox" }
+    if ($saved_theme in (theme-list)) { $saved_theme }
+    else {
+        let g = (ghostty-theme-name)
+        if ($g | is-not-empty) { $g } else { "gruvbox" }
+    }
 )
 theme-apply $start_theme
 
