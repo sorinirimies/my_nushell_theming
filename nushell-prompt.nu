@@ -293,9 +293,96 @@ def neon-color-config [] {
     }
 }
 
+# ── Extra themes via a shared builder ────────────────────────
+const TOKYO = {
+    fg: "#c0caf5", gray: "#565f89", red: "#f7768e", orange: "#ff9e64"
+    yellow: "#e0af68", green: "#9ece6a", cyan: "#7dcfff", blue: "#7aa2f7"
+    magenta: "#bb9af7", purple: "#9d7cd8", bg: "#1a1b26"
+}
+const NORD = {
+    fg: "#d8dee9", gray: "#4c566a", red: "#bf616a", orange: "#d08770"
+    yellow: "#ebcb8b", green: "#a3be8c", cyan: "#88c0d0", blue: "#81a1c1"
+    magenta: "#b48ead", purple: "#5e81ac", bg: "#2e3440"
+}
+
+# Generic color_config from a simple palette (fg/gray/red/orange/yellow/
+# green/cyan/blue/magenta/bg). Reused by tokyo-night and nord.
+def basic-color-config [c: record] {
+    {
+        separator: { fg: $c.gray }
+        leading_trailing_space_bg: { attr: n }
+        header: { fg: $c.blue attr: b }
+        empty: $c.blue
+        bool: $c.cyan
+        int: $c.magenta
+        filesize: $c.cyan
+        duration: $c.magenta
+        date: $c.yellow
+        range: $c.fg
+        float: $c.magenta
+        string: $c.green
+        nothing: $c.gray
+        binary: $c.orange
+        cell-path: $c.fg
+        row_index: { fg: $c.yellow attr: b }
+        record: $c.fg
+        list: $c.fg
+        block: $c.fg
+        hints: $c.gray
+        search_result: { fg: $c.bg bg: $c.yellow }
+        shape_and: { fg: $c.magenta attr: b }
+        shape_binary: { fg: $c.magenta attr: b }
+        shape_block: { fg: $c.blue attr: b }
+        shape_bool: $c.cyan
+        shape_closure: { fg: $c.cyan attr: b }
+        shape_custom: $c.green
+        shape_datetime: { fg: $c.cyan attr: b }
+        shape_directory: $c.blue
+        shape_external: $c.cyan
+        shape_externalarg: { fg: $c.green attr: b }
+        shape_external_resolved: { fg: $c.yellow attr: b }
+        shape_filepath: $c.blue
+        shape_flag: { fg: $c.magenta attr: b }
+        shape_float: { fg: $c.magenta attr: b }
+        shape_glob_interpolation: { fg: $c.cyan attr: b }
+        shape_globpattern: { fg: $c.cyan attr: b }
+        shape_int: { fg: $c.magenta attr: b }
+        shape_internalcall: { fg: $c.cyan attr: b }
+        shape_keyword: { fg: $c.red attr: b }
+        shape_list: { fg: $c.cyan attr: b }
+        shape_literal: $c.blue
+        shape_match_pattern: $c.green
+        shape_matching_brackets: { attr: u }
+        shape_nothing: $c.cyan
+        shape_operator: $c.orange
+        shape_or: { fg: $c.magenta attr: b }
+        shape_pipe: { fg: $c.magenta attr: b }
+        shape_range: { fg: $c.orange attr: b }
+        shape_record: { fg: $c.cyan attr: b }
+        shape_redirection: { fg: $c.magenta attr: b }
+        shape_signature: { fg: $c.green attr: b }
+        shape_string: $c.green
+        shape_string_interpolation: { fg: $c.cyan attr: b }
+        shape_table: { fg: $c.blue attr: b }
+        shape_variable: $c.magenta
+        shape_vardecl: $c.magenta
+        shape_garbage: { fg: $c.bg bg: $c.red attr: b }
+    }
+}
+
+def basic-prompt-palette [c: record] {
+    {
+        user: $c.yellow, host: $c.orange, path: $c.blue, git: $c.magenta
+        sep: $c.gray, ok: $c.green, err: $c.red, time: $c.gray
+        added: $c.green, modified: $c.yellow, deleted: $c.red, untracked: $c.gray
+        ahead: $c.cyan, behind: $c.orange, stash: $c.magenta, conflict: $c.red
+        duration: $c.orange, ink: $c.bg
+    }
+}
+
 # ── Public API ────────────────────────────────────────────────
 def theme-list [] {
-    ["gruvbox" "catppuccin-mocha" "catppuccin-macchiato" "catppuccin-frappe" "catppuccin-latte" "cyberpunk"]
+    ["gruvbox" "catppuccin-mocha" "catppuccin-macchiato" "catppuccin-frappe" "catppuccin-latte" "tokyo-night" "nord" "cyberpunk"]
 }
 
 def theme-get [name: string] {
@@ -314,6 +401,8 @@ def theme-get [name: string] {
                 duration: $NEON.orange, ink: $NEON.bg
             }
         }
+        "tokyo-night" => { color_config: (basic-color-config $TOKYO) palette: (basic-prompt-palette $TOKYO) }
+        "nord"        => { color_config: (basic-color-config $NORD)  palette: (basic-prompt-palette $NORD) }
         _ => {
             color_config: (gruvbox-color-config)
             palette: {
@@ -366,8 +455,62 @@ def --env theme [name?: string] {
     }
     theme-apply $choice
     $choice | save -f (theme-state-path)
-    print $"(ansi green_bold)✓(ansi reset) theme set to (ansi attr_bold)($choice)(ansi reset)"
+    print $"(ansi green_bold)✓(ansi reset) theme set to (ansi attr_bold)($choice)(ansi reset) (ansi grey)(pinned)(ansi reset)"
+    # When picked interactively, also choose a matching prompt style.
+    if ($name | is-empty) {
+        let s = (prompt-styles | input list --fuzzy $"prompt style for ($choice)  \(esc to keep ($env.PROMPT_STYLE? | default 'full')\)")
+        if ($s | is-not-empty) {
+            $env.PROMPT_STYLE = $s
+            $s | save -f (prompt-style-path)
+            print $"(ansi green_bold)✓(ansi reset) prompt style set to (ansi attr_bold)($s)(ansi reset)"
+        }
+    }
 }
+
+# Curated theme + prompt-style combinations.
+def presets [] {
+    [
+        { name: "cyberpunk",        theme: "cyberpunk",             style: "cyberpunk" }
+        { name: "synthwave",        theme: "cyberpunk",             style: "capsule" }
+        { name: "gruvbox",          theme: "gruvbox",               style: "full" }
+        { name: "gruvbox-minimal",  theme: "gruvbox",               style: "minimal" }
+        { name: "mocha-pure",       theme: "catppuccin-mocha",      style: "pure" }
+        { name: "macchiato-lambda", theme: "catppuccin-macchiato",  style: "lambda" }
+        { name: "latte-compact",    theme: "catppuccin-latte",      style: "compact" }
+        { name: "tokyo-powerline",  theme: "tokyo-night",           style: "powerline" }
+        { name: "tokyo-capsule",    theme: "tokyo-night",           style: "capsule" }
+        { name: "nord-lambda",      theme: "nord",                  style: "lambda" }
+    ]
+}
+
+# Apply + pin a theme and a prompt style together (overrides Ghostty).
+def --env apply-look [theme_name: string, style_name: string] {
+    theme-apply $theme_name
+    $env.PROMPT_STYLE = $style_name
+    $theme_name | save -f (theme-state-path)
+    $style_name | save -f (prompt-style-path)
+}
+
+# Pick a full look (theme + prompt style). No arg = interactive picker.
+def --env look [name?: string] {
+    let ps = (presets)
+    let choice = if ($name | is-empty) {
+        $ps | each {|r| $"($r.name)  —  ($r.theme) + ($r.style)" } | input list --fuzzy "look  (theme + prompt style)"
+        | split row "  —  " | get 0? | default ""
+    } else { $name }
+    if ($choice | is-empty) { return }
+    let row = ($ps | where name == $choice | get 0?)
+    if ($row | is-empty) {
+        print $"(ansi red)unknown look:(ansi reset) ($choice)"
+        print $"available: ($ps | get name | str join ', ')"
+        return
+    }
+    apply-look $row.theme $row.style
+    print $"(ansi green_bold)✓(ansi reset) look (ansi attr_bold)($choice)(ansi reset) — theme (ansi attr_bold)($row.theme)(ansi reset), style (ansi attr_bold)($row.style)(ansi reset)"
+}
+
+# List available looks.
+def looks [] { presets | select name theme style }
 
 # Read Ghostty's active theme and map it to a nushell theme name.
 # Returns null when it can't be determined.
@@ -437,7 +580,7 @@ theme-apply $start_theme
 # ─────────────────────────────────────────────────────────────
 
 def prompt-style-path [] { $nu.default-config-dir | path join "prompt-style.txt" }
-def prompt-styles [] { ["full" "compact" "minimal" "lambda" "pure" "powerline" "cyberpunk"] }
+def prompt-styles [] { ["full" "compact" "minimal" "lambda" "pure" "powerline" "capsule" "cyberpunk"] }
 
 # Use Nerd Font glyphs (branch icon). Set to false for plain ASCII.
 $env.PROMPT_NERD = true
@@ -581,6 +724,17 @@ def create_left_prompt [] {
                 $" (ansi {fg: $p.sep})($g.head)($dirty)(ansi reset)"
             } else { "" }
             $"(ansi {fg: $p.path attr: b})($full_dir)(ansi reset)($git_txt)\n"
+        }
+        "capsule" => {
+            let lc = (char --unicode e0b6)
+            let rc = (char --unicode e0b4)
+            let ink = $p.ink
+            let g = (git-info)
+            let path_cap = $"(ansi {fg: $p.path})($lc)(ansi {bg: $p.path fg: $ink attr: b}) ($full_dir) (ansi reset)(ansi {fg: $p.path})($rc)(ansi reset)"
+            let git_cap = if $g.present {
+                $"  (ansi {fg: $p.git})($lc)(ansi {bg: $p.git fg: $ink attr: b}) (git-plain $g) (ansi reset)(ansi {fg: $p.git})($rc)(ansi reset)"
+            } else { "" }
+            $"($path_cap)($git_cap)"
         }
         "powerline" => {
             let sep = (char --unicode e0b0)

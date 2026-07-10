@@ -8,15 +8,17 @@ Works on **macOS** and **Linux**.
 
 ## Features
 
-- **6 color themes**: `gruvbox`, `catppuccin-mocha`, `catppuccin-macchiato`,
-  `catppuccin-frappe`, `catppuccin-latte`, and a neon **`cyberpunk`**. Themes
-  recolor syntax highlighting, tables **and** the prompt.
+- **8 color themes**: `gruvbox`, `catppuccin-mocha`, `catppuccin-macchiato`,
+  `catppuccin-frappe`, `catppuccin-latte`, `tokyo-night`, `nord`, and a neon
+  **`cyberpunk`**. Themes recolor syntax highlighting, tables **and** the prompt.
+- **Looks** — curated theme + prompt-style combos applied in one step
+  (e.g. `cyberpunk`, `synthwave`, `tokyo-powerline`, `mocha-pure`).
 - **Ghostty auto-follow** (optional): by default the theme follows your Ghostty
   config (`theme = …`), matched automatically. Pick a theme manually with
   `theme <name>` to **pin** it (survives new shells); `theme-sync` re-enables
   auto-follow.
-- **7 prompt styles**: `full`, `compact`, `minimal`, `lambda`, `pure`,
-  `powerline`, `cyberpunk`.
+- **8 prompt styles**: `full`, `compact`, `minimal`, `lambda`, `pure`,
+  `powerline`, `capsule`, `cyberpunk`.
 - **oh-my-zsh style git info**: branch, `⇡`ahead `⇣`behind `=`conflict
   `+`staged `!`modified `?`untracked `*`stash, `✔` clean.
 - **Command duration** (for commands > 2s) and an **exit-status-aware** prompt
@@ -65,14 +67,33 @@ prompt-style cyberpunk   # two-line neon layout with ⚡ and ▶▶▶
 ## Usage
 
 ```nu
-theme                 # interactive theme picker (fuzzy)
-theme cyberpunk       # pin a theme
+look                  # pick a full LOOK: theme + prompt style, in one step
+look cyberpunk        # apply a named look (pins theme + style, overrides Ghostty)
+looks                 # list available looks
+
+theme                 # pick a theme, THEN a prompt style (interactive)
+theme nord            # set + pin a theme only
 theme-sync            # re-enable Ghostty auto-follow
 theme-list
 
-prompt-style          # interactive style picker
-prompt-style cyberpunk
+prompt-style          # change ONLY the prompt style
+prompt-style capsule
 ```
+
+### Looks (theme + style presets)
+
+| Look               | Theme                | Style     |
+|--------------------|----------------------|-----------|
+| `cyberpunk`        | cyberpunk            | cyberpunk |
+| `synthwave`        | cyberpunk            | capsule   |
+| `gruvbox`          | gruvbox              | full      |
+| `gruvbox-minimal`  | gruvbox              | minimal   |
+| `mocha-pure`       | catppuccin-mocha     | pure      |
+| `macchiato-lambda` | catppuccin-macchiato | lambda    |
+| `latte-compact`    | catppuccin-latte     | compact   |
+| `tokyo-powerline`  | tokyo-night          | powerline |
+| `tokyo-capsule`    | tokyo-night          | capsule   |
+| `nord-lambda`      | nord                 | lambda    |
 
 ### Styles
 
@@ -84,6 +105,7 @@ prompt-style cyberpunk
 | `lambda`    | `λ ~/path on  branch +git`                                 |
 | `pure`      | two-line, [pure](https://github.com/sindresorhus/pure)-like |
 | `powerline` | Nerd-Font segments with `` separators                     |
+| `capsule`   | Nerd-Font rounded "pill" segments                           |
 | `cyberpunk` | two-line neon box-drawing with `⚡` and `▶▶▶`                |
 
 ### Toggles
