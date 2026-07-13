@@ -2,8 +2,8 @@
 
 ![platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-blue)
 ![nushell](https://img.shields.io/badge/nushell-%E2%89%A50.101-4E9A06)
-![themes](https://img.shields.io/badge/themes-15-cba6f7)
-![styles](https://img.shields.io/badge/prompt%20styles-11-89b4fa)
+![themes](https://img.shields.io/badge/themes-25-cba6f7)
+![styles](https://img.shields.io/badge/prompt%20styles-13-89b4fa)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
 A themeable, git-aware [Nushell](https://www.nushell.sh) prompt with multiple
@@ -14,19 +14,22 @@ Works on **macOS** and **Linux**.
 
 ## Features
 
-- **15 color themes**: `gruvbox`, `catppuccin-mocha`, `catppuccin-macchiato`,
+- **25 color themes**: `gruvbox`, `catppuccin-mocha`, `catppuccin-macchiato`,
   `catppuccin-frappe`, `catppuccin-latte`, `tokyo-night`, `nord`, `dracula`,
-  `rose-pine`, `everforest`, `kanagawa`, `onedark`, `solarized`,
-  `solarized-light`, and a neon **`cyberpunk`**. Themes recolor syntax
-  highlighting, tables **and** the prompt.
+  `rose-pine`, `rose-pine-moon`, `rose-pine-dawn`, `everforest`, `kanagawa`,
+  `onedark`, `monokai`, `ayu-dark`, `ayu-mirage`, `night-owl`, `github-dark`,
+  `github-light`, `oxocarbon`, `zenburn`, `solarized`, `solarized-light`, and a
+  neon **`cyberpunk`**. Themes recolor syntax highlighting, tables **and** the
+  prompt.
 - **Looks** — curated theme + prompt-style combos applied in one step
   (e.g. `cyberpunk`, `synthwave`, `tokyo-powerline`, `mocha-pure`).
 - **Ghostty auto-follow** (optional): by default the theme follows your Ghostty
   config (`theme = …`), matched automatically. Pick a theme manually with
   `theme <name>` to **pin** it (survives new shells); `theme-sync` re-enables
   auto-follow.
-- **11 prompt styles**: `full`, `compact`, `minimal`, `lambda`, `pure`,
-  `bracket`, `powerline`, `slant`, `capsule`, `boxed`, `cyberpunk`.
+- **13 prompt styles**: `full`, `compact`, `minimal`, `lambda`, `pure`,
+  `bracket`, `arrow`, `powerline`, `slant`, `capsule`, `rainbow`, `boxed`,
+  `cyberpunk`.
 - **oh-my-zsh style git info**: branch, `⇡`ahead `⇣`behind `=`conflict
   `+`staged `!`modified `?`untracked `*`stash, `✔` clean.
 - **Command duration** (for commands > 2s) and an **exit-status-aware** prompt
@@ -121,9 +124,11 @@ prompt-style capsule
 | `lambda`    | `λ ~/path on  branch +git`                                 |
 | `pure`      | two-line, [pure](https://github.com/sindresorhus/pure)-like |
 | `bracket`   | ASCII `[user@host] [path] [git]` (no Nerd Font needed)       |
+| `arrow`     | `user » path » git` — no Nerd Font needed                    |
 | `powerline` | Nerd-Font segments with `` separators                     |
 | `slant`     | Nerd-Font slanted segment separators                        |
 | `capsule`   | Nerd-Font rounded "pill" segments                           |
+| `rainbow`   | Nerd-Font powerline, each segment its own color             |
 | `boxed`     | two-line box-drawing with a `●` clean/dirty marker          |
 | `cyberpunk` | two-line neon box-drawing with `⚡` and `▶▶▶`                |
 

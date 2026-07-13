@@ -339,6 +339,56 @@ const SOLARIZED_LIGHT = {
     yellow: "#b58900", green: "#859900", cyan: "#2aa198", blue: "#268bd2"
     magenta: "#d33682", purple: "#6c71c4", bg: "#fdf6e3"
 }
+const ROSE_PINE_MOON = {
+    fg: "#e0def4", gray: "#6e6a86", red: "#eb6f92", orange: "#ea9a97"
+    yellow: "#f6c177", green: "#9ccfd8", cyan: "#9ccfd8", blue: "#3e8fb0"
+    magenta: "#c4a7e7", purple: "#c4a7e7", bg: "#232136"
+}
+const ROSE_PINE_DAWN = {
+    fg: "#575279", gray: "#9893a5", red: "#b4637a", orange: "#d7827e"
+    yellow: "#ea9d34", green: "#56949f", cyan: "#56949f", blue: "#286983"
+    magenta: "#907aa9", purple: "#907aa9", bg: "#faf4ed"
+}
+const MONOKAI = {
+    fg: "#f8f8f2", gray: "#75715e", red: "#f92672", orange: "#fd971f"
+    yellow: "#e6db74", green: "#a6e22e", cyan: "#66d9ef", blue: "#66d9ef"
+    magenta: "#ae81ff", purple: "#ae81ff", bg: "#272822"
+}
+const AYU_MIRAGE = {
+    fg: "#cbccc6", gray: "#707a8c", red: "#ff3333", orange: "#ffa759"
+    yellow: "#ffd580", green: "#bae67e", cyan: "#95e6cb", blue: "#73d0ff"
+    magenta: "#d4bfff", purple: "#d4bfff", bg: "#1f2430"
+}
+const AYU_DARK = {
+    fg: "#bfbdb6", gray: "#565b66", red: "#f26d78", orange: "#ff8f40"
+    yellow: "#e6b450", green: "#aad94c", cyan: "#95e6cb", blue: "#59c2ff"
+    magenta: "#d2a6ff", purple: "#d2a6ff", bg: "#0b0e14"
+}
+const NIGHT_OWL = {
+    fg: "#d6deeb", gray: "#637777", red: "#ef5350", orange: "#f78c6c"
+    yellow: "#ffeb95", green: "#addb67", cyan: "#7fdbca", blue: "#82aaff"
+    magenta: "#c792ea", purple: "#c792ea", bg: "#011627"
+}
+const GITHUB_DARK = {
+    fg: "#c9d1d9", gray: "#8b949e", red: "#ff7b72", orange: "#ffa657"
+    yellow: "#e3b341", green: "#7ee787", cyan: "#a5d6ff", blue: "#79c0ff"
+    magenta: "#d2a8ff", purple: "#d2a8ff", bg: "#0d1117"
+}
+const GITHUB_LIGHT = {
+    fg: "#24292f", gray: "#6e7781", red: "#cf222e", orange: "#bc4c00"
+    yellow: "#9a6700", green: "#1a7f37", cyan: "#1b7c83", blue: "#0969da"
+    magenta: "#8250df", purple: "#8250df", bg: "#ffffff"
+}
+const OXOCARBON = {
+    fg: "#f2f4f8", gray: "#525252", red: "#ee5396", orange: "#ff6f00"
+    yellow: "#fae48c", green: "#42be65", cyan: "#3ddbd9", blue: "#33b1ff"
+    magenta: "#be95ff", purple: "#be95ff", bg: "#161616"
+}
+const ZENBURN = {
+    fg: "#dcdccc", gray: "#709080", red: "#cc9393", orange: "#dfaf8f"
+    yellow: "#f0dfaf", green: "#7f9f7f", cyan: "#93e0e3", blue: "#8cd0d3"
+    magenta: "#dc8cc3", purple: "#dc8cc3", bg: "#3f3f3f"
+}
 
 # Generic color_config from a simple palette (fg/gray/red/orange/yellow/
 # green/cyan/blue/magenta/bg). Reused by tokyo-night and nord.
@@ -417,7 +467,7 @@ def basic-prompt-palette [c: record] {
 
 # ── Public API ────────────────────────────────────────────────
 def theme-list [] {
-    ["gruvbox" "catppuccin-mocha" "catppuccin-macchiato" "catppuccin-frappe" "catppuccin-latte" "tokyo-night" "nord" "dracula" "rose-pine" "everforest" "kanagawa" "onedark" "solarized" "solarized-light" "cyberpunk"]
+    ["gruvbox" "catppuccin-mocha" "catppuccin-macchiato" "catppuccin-frappe" "catppuccin-latte" "tokyo-night" "nord" "dracula" "rose-pine" "rose-pine-moon" "rose-pine-dawn" "everforest" "kanagawa" "onedark" "monokai" "ayu-dark" "ayu-mirage" "night-owl" "github-dark" "github-light" "oxocarbon" "zenburn" "solarized" "solarized-light" "cyberpunk"]
 }
 
 def theme-get [name: string] {
@@ -440,9 +490,19 @@ def theme-get [name: string] {
         "nord"        => { color_config: (basic-color-config $NORD)  palette: (basic-prompt-palette $NORD) }
         "dracula"     => { color_config: (basic-color-config $DRACULA)     palette: (basic-prompt-palette $DRACULA) }
         "rose-pine"   => { color_config: (basic-color-config $ROSE_PINE)   palette: (basic-prompt-palette $ROSE_PINE) }
+        "rose-pine-moon" => { color_config: (basic-color-config $ROSE_PINE_MOON) palette: (basic-prompt-palette $ROSE_PINE_MOON) }
+        "rose-pine-dawn" => { color_config: (basic-color-config $ROSE_PINE_DAWN) palette: (basic-prompt-palette $ROSE_PINE_DAWN) }
         "everforest"  => { color_config: (basic-color-config $EVERFOREST)  palette: (basic-prompt-palette $EVERFOREST) }
         "kanagawa"    => { color_config: (basic-color-config $KANAGAWA)    palette: (basic-prompt-palette $KANAGAWA) }
         "onedark"     => { color_config: (basic-color-config $ONEDARK)     palette: (basic-prompt-palette $ONEDARK) }
+        "monokai"     => { color_config: (basic-color-config $MONOKAI)     palette: (basic-prompt-palette $MONOKAI) }
+        "ayu-dark"    => { color_config: (basic-color-config $AYU_DARK)    palette: (basic-prompt-palette $AYU_DARK) }
+        "ayu-mirage"  => { color_config: (basic-color-config $AYU_MIRAGE)  palette: (basic-prompt-palette $AYU_MIRAGE) }
+        "night-owl"   => { color_config: (basic-color-config $NIGHT_OWL)   palette: (basic-prompt-palette $NIGHT_OWL) }
+        "github-dark"  => { color_config: (basic-color-config $GITHUB_DARK)  palette: (basic-prompt-palette $GITHUB_DARK) }
+        "github-light" => { color_config: (basic-color-config $GITHUB_LIGHT) palette: (basic-prompt-palette $GITHUB_LIGHT) }
+        "oxocarbon"   => { color_config: (basic-color-config $OXOCARBON)   palette: (basic-prompt-palette $OXOCARBON) }
+        "zenburn"     => { color_config: (basic-color-config $ZENBURN)     palette: (basic-prompt-palette $ZENBURN) }
         "solarized"       => { color_config: (basic-color-config $SOLARIZED)       palette: (basic-prompt-palette $SOLARIZED) }
         "solarized-light" => { color_config: (basic-color-config $SOLARIZED_LIGHT) palette: (basic-prompt-palette $SOLARIZED_LIGHT) }
         _ => {
@@ -529,6 +589,12 @@ def presets [] {
         { name: "kanagawa-capsule", theme: "kanagawa",              style: "capsule" }
         { name: "onedark-bracket",  theme: "onedark",               style: "bracket" }
         { name: "solarized-full",   theme: "solarized",             style: "full" }
+        { name: "monokai-rainbow",  theme: "monokai",               style: "rainbow" }
+        { name: "ayu-arrow",        theme: "ayu-dark",              style: "arrow" }
+        { name: "night-owl-pure",   theme: "night-owl",             style: "pure" }
+        { name: "github-arrow",     theme: "github-dark",           style: "arrow" }
+        { name: "oxocarbon-rainbow",theme: "oxocarbon",             style: "rainbow" }
+        { name: "rose-moon-boxed",  theme: "rose-pine-moon",        style: "boxed" }
     ]
 }
 
@@ -596,10 +662,21 @@ def ghostty-theme-name [] {
     } else if ($low | str contains "tokyo") { "tokyo-night"
     } else if ($low | str contains "nord") { "nord"
     } else if ($low | str contains "dracula") { "dracula"
-    } else if (($low | str contains "rose") or ($low | str contains "ros\u{e9}")) { "rose-pine"
+    } else if (($low | str contains "rose") or ($low | str contains "ros\u{e9}")) {
+        if ($low | str contains "dawn") { "rose-pine-dawn"
+        } else if ($low | str contains "moon") { "rose-pine-moon"
+        } else { "rose-pine" }
     } else if ($low | str contains "everforest") { "everforest"
     } else if ($low | str contains "kanagawa") { "kanagawa"
     } else if (($low | str contains "one") and ($low | str contains "dark")) { "onedark"
+    } else if ($low | str contains "monokai") { "monokai"
+    } else if ($low | str contains "mirage") { "ayu-mirage"
+    } else if ($low | str contains "ayu") { "ayu-dark"
+    } else if (($low | str contains "night") and ($low | str contains "owl")) { "night-owl"
+    } else if (($low | str contains "github") and ($low | str contains "light")) { "github-light"
+    } else if ($low | str contains "github") { "github-dark"
+    } else if ($low | str contains "oxocarbon") { "oxocarbon"
+    } else if ($low | str contains "zenburn") { "zenburn"
     } else if (($low | str contains "solarized") and ($low | str contains "light")) { "solarized-light"
     } else if ($low | str contains "solarized") { "solarized"
     } else { null }
@@ -638,7 +715,7 @@ theme-apply $start_theme
 # ─────────────────────────────────────────────────────────────
 
 def prompt-style-path [] { $nu.default-config-dir | path join "prompt-style.txt" }
-def prompt-styles [] { ["full" "compact" "minimal" "lambda" "pure" "bracket" "powerline" "slant" "capsule" "boxed" "cyberpunk"] }
+def prompt-styles [] { ["full" "compact" "minimal" "lambda" "pure" "bracket" "arrow" "powerline" "slant" "capsule" "rainbow" "boxed" "cyberpunk"] }
 
 # Use Nerd Font glyphs (branch icon). Set to false for plain ASCII.
 $env.PROMPT_NERD = true
@@ -827,6 +904,27 @@ def create_left_prompt [] {
             let l1 = $"(ansi {fg: $p.sep})╭─ ($uh) (ansi {fg: $p.sep})in (ansi {fg: $p.path attr: b})($full_dir)(ansi reset)($git_txt)"
             let l2 = $"(ansi {fg: $p.sep})╰─(ansi reset)"
             $"($l1)\n($l2)"
+        }
+        "arrow" => {
+            let g = (git-info)
+            let sep = $"(ansi {fg: $p.sep}) » "
+            let gitp = if $g.present { $"($sep)(ansi {fg: $p.git attr: b})(git-plain $g)(ansi reset)" } else { "" }
+            $"(ansi {fg: $p.user attr: b})(prompt-user)(ansi reset)($sep)(ansi {fg: $p.path attr: b})($full_dir)(ansi reset)($gitp)"
+        }
+        "rainbow" => {
+            let a = (char --unicode e0b0)
+            let ink = $p.ink
+            let g = (git-info)
+            let s1 = $"(ansi {bg: $p.user fg: $ink attr: b}) (prompt-user) "
+            let t12 = $"(ansi {fg: $p.user bg: $p.path})($a)"
+            let s2 = $"(ansi {bg: $p.path fg: $ink attr: b}) ($full_dir) "
+            if $g.present {
+                let t23 = $"(ansi {fg: $p.path bg: $p.git})($a)"
+                let s3 = $"(ansi {bg: $p.git fg: $ink attr: b}) (git-plain $g) "
+                $"($s1)($t12)($s2)($t23)($s3)(ansi reset)(ansi {fg: $p.git})($a)(ansi reset) "
+            } else {
+                $"($s1)($t12)($s2)(ansi reset)(ansi {fg: $p.path})($a)(ansi reset) "
+            }
         }
         "capsule" => {
             let lc = (char --unicode e0b6)
