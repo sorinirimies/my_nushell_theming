@@ -2,8 +2,8 @@
 
 ![platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-blue)
 ![nushell](https://img.shields.io/badge/nushell-%E2%89%A50.101-4E9A06)
-![themes](https://img.shields.io/badge/themes-25-cba6f7)
-![styles](https://img.shields.io/badge/prompt%20styles-13-89b4fa)
+![themes](https://img.shields.io/badge/themes-26-cba6f7)
+![styles](https://img.shields.io/badge/prompt%20styles-16-89b4fa)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
 A themeable, git-aware [Nushell](https://www.nushell.sh) prompt with multiple
@@ -18,18 +18,18 @@ Works on **macOS** and **Linux**.
   `catppuccin-frappe`, `catppuccin-latte`, `tokyo-night`, `nord`, `dracula`,
   `rose-pine`, `rose-pine-moon`, `rose-pine-dawn`, `everforest`, `kanagawa`,
   `onedark`, `monokai`, `ayu-dark`, `ayu-mirage`, `night-owl`, `github-dark`,
-  `github-light`, `oxocarbon`, `zenburn`, `solarized`, `solarized-light`, and a
-  neon **`cyberpunk`**. Themes recolor syntax highlighting, tables **and** the
-  prompt.
+  `github-light`, `oxocarbon`, `zenburn`, `solarized`, `solarized-light`,
+  `super-mario`, and a neon **`cyberpunk`**. Themes recolor syntax highlighting,
+  tables **and** the prompt.
 - **Looks** — curated theme + prompt-style combos applied in one step
   (e.g. `cyberpunk`, `synthwave`, `tokyo-powerline`, `mocha-pure`).
 - **Ghostty auto-follow** (optional): by default the theme follows your Ghostty
   config (`theme = …`), matched automatically. Pick a theme manually with
   `theme <name>` to **pin** it (survives new shells); `theme-sync` re-enables
   auto-follow.
-- **13 prompt styles**: `full`, `compact`, `minimal`, `lambda`, `pure`,
+- **16 prompt styles**: `full`, `compact`, `minimal`, `lambda`, `pure`,
   `bracket`, `arrow`, `powerline`, `slant`, `capsule`, `rainbow`, `boxed`,
-  `cyberpunk`.
+  `mario`, `arcade`, `8bit`, `cyberpunk`.
 - **oh-my-zsh style git info**: branch, `⇡`ahead `⇣`behind `=`conflict
   `+`staged `!`modified `?`untracked `*`stash, `✔` clean.
 - **Command duration** (for commands > 2s) and an **exit-status-aware** prompt
@@ -123,6 +123,10 @@ Light themes (`github-light`, `catppuccin-latte`, `rose-pine-dawn`,
 
 ![prompt styles](docs/styles.gif)
 
+Game-inspired styles — try `look super-mario`, `look arcade`, or `look 8bit`:
+
+![game styles](docs/games.gif)
+
 | Style       | Look                                                        |
 |-------------|-------------------------------------------------------------|
 | `full`      | `user@host in ~/path on  branch +git`  (default)          |
@@ -137,6 +141,9 @@ Light themes (`github-light`, `catppuccin-latte`, `rose-pine-dawn`,
 | `capsule`   | Nerd-Font rounded "pill" segments                           |
 | `rainbow`   | Nerd-Font powerline, each segment its own color             |
 | `boxed`     | two-line box-drawing with a `●` clean/dirty marker          |
+| `mario`     | 🍄 game vibe — `◆` hero, `⚑` flag, `◉` coins (changes)         |
+| `arcade`    | retro all-caps `▶ 1UP` score line                          |
+| `8bit`      | pixel `░▒▓` gradient separators                              |
 | `cyberpunk` | two-line neon box-drawing with `⚡` and `▶▶▶`                |
 
 ### Toggles

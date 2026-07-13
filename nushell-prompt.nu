@@ -389,6 +389,12 @@ const ZENBURN = {
     yellow: "#f0dfaf", green: "#7f9f7f", cyan: "#93e0e3", blue: "#8cd0d3"
     magenta: "#dc8cc3", purple: "#dc8cc3", bg: "#3f3f3f"
 }
+# Super Mario — vivid red / coin-gold / luigi-green / sky-blue on night bg.
+const SUPER_MARIO = {
+    fg: "#f8f8f2", gray: "#8a7f9a", red: "#e52521", orange: "#e39c4b"
+    yellow: "#fbd000", green: "#43b047", cyan: "#49b6d8", blue: "#049cd8"
+    magenta: "#d472d4", purple: "#7c5cbf", bg: "#12102a"
+}
 
 # Generic color_config from a simple palette (fg/gray/red/orange/yellow/
 # green/cyan/blue/magenta/bg). Reused by tokyo-night and nord.
@@ -467,7 +473,7 @@ def basic-prompt-palette [c: record] {
 
 # ── Public API ────────────────────────────────────────────────
 def theme-list [] {
-    ["gruvbox" "catppuccin-mocha" "catppuccin-macchiato" "catppuccin-frappe" "catppuccin-latte" "tokyo-night" "nord" "dracula" "rose-pine" "rose-pine-moon" "rose-pine-dawn" "everforest" "kanagawa" "onedark" "monokai" "ayu-dark" "ayu-mirage" "night-owl" "github-dark" "github-light" "oxocarbon" "zenburn" "solarized" "solarized-light" "cyberpunk"]
+    ["gruvbox" "catppuccin-mocha" "catppuccin-macchiato" "catppuccin-frappe" "catppuccin-latte" "tokyo-night" "nord" "dracula" "rose-pine" "rose-pine-moon" "rose-pine-dawn" "everforest" "kanagawa" "onedark" "monokai" "ayu-dark" "ayu-mirage" "night-owl" "github-dark" "github-light" "oxocarbon" "zenburn" "solarized" "solarized-light" "super-mario" "cyberpunk"]
 }
 
 def theme-get [name: string] {
@@ -503,6 +509,7 @@ def theme-get [name: string] {
         "github-light" => { color_config: (basic-color-config $GITHUB_LIGHT) palette: (basic-prompt-palette $GITHUB_LIGHT) }
         "oxocarbon"   => { color_config: (basic-color-config $OXOCARBON)   palette: (basic-prompt-palette $OXOCARBON) }
         "zenburn"     => { color_config: (basic-color-config $ZENBURN)     palette: (basic-prompt-palette $ZENBURN) }
+        "super-mario" => { color_config: (basic-color-config $SUPER_MARIO) palette: (basic-prompt-palette $SUPER_MARIO) }
         "solarized"       => { color_config: (basic-color-config $SOLARIZED)       palette: (basic-prompt-palette $SOLARIZED) }
         "solarized-light" => { color_config: (basic-color-config $SOLARIZED_LIGHT) palette: (basic-prompt-palette $SOLARIZED_LIGHT) }
         _ => {
@@ -595,6 +602,9 @@ def presets [] {
         { name: "github-arrow",     theme: "github-dark",           style: "arrow" }
         { name: "oxocarbon-rainbow",theme: "oxocarbon",             style: "rainbow" }
         { name: "rose-moon-boxed",  theme: "rose-pine-moon",        style: "boxed" }
+        { name: "super-mario",      theme: "super-mario",           style: "mario" }
+        { name: "arcade",           theme: "super-mario",           style: "arcade" }
+        { name: "8bit",             theme: "gruvbox",               style: "8bit" }
     ]
 }
 
@@ -677,6 +687,7 @@ def ghostty-theme-name [] {
     } else if ($low | str contains "github") { "github-dark"
     } else if ($low | str contains "oxocarbon") { "oxocarbon"
     } else if ($low | str contains "zenburn") { "zenburn"
+    } else if ($low | str contains "mario") { "super-mario"
     } else if (($low | str contains "solarized") and ($low | str contains "light")) { "solarized-light"
     } else if ($low | str contains "solarized") { "solarized"
     } else { null }
@@ -715,7 +726,7 @@ theme-apply $start_theme
 # ─────────────────────────────────────────────────────────────
 
 def prompt-style-path [] { $nu.default-config-dir | path join "prompt-style.txt" }
-def prompt-styles [] { ["full" "compact" "minimal" "lambda" "pure" "bracket" "arrow" "powerline" "slant" "capsule" "rainbow" "boxed" "cyberpunk"] }
+def prompt-styles [] { ["full" "compact" "minimal" "lambda" "pure" "bracket" "arrow" "powerline" "slant" "capsule" "rainbow" "boxed" "mario" "arcade" "8bit" "cyberpunk"] }
 
 # Use Nerd Font glyphs (branch icon). Set to false for plain ASCII.
 $env.PROMPT_NERD = true
@@ -926,6 +937,32 @@ def create_left_prompt [] {
                 $"($s1)($t12)($s2)(ansi reset)(ansi {fg: $p.path})($a)(ansi reset) "
             }
         }
+        "mario" => {
+            # ◆ hero · ⚑ flag(branch) · ◉ coins(changes) / ★ when clean
+            let g = (git-info)
+            let hero = $"(ansi {fg: $p.err attr: b})◆(ansi reset)"
+            let dir = $"(ansi {fg: $p.path attr: b})($full_dir)(ansi reset)"
+            let git_txt = if $g.present {
+                let flag = $" (ansi {fg: $p.ok attr: b})⚑ ($g.head)(ansi reset)"
+                let n = ($g.staged + $g.modified + $g.untracked)
+                let coins = if $n > 0 { $" (ansi {fg: $p.modified attr: b})◉×($n)(ansi reset)" } else { $" (ansi {fg: $p.modified})★(ansi reset)" }
+                $"($flag)($coins)"
+            } else { "" }
+            $"($hero) ($dir)($git_txt)"
+        }
+        "arcade" => {
+            # retro all-caps score/1UP vibe
+            let g = (git-info)
+            let git_txt = if $g.present { $" (ansi {fg: $p.sep})‹(ansi {fg: $p.git attr: b})(git-plain $g | str upcase)(ansi {fg: $p.sep})›(ansi reset)" } else { "" }
+            $"(ansi {fg: $p.modified attr: b})▶ 1UP(ansi reset) (ansi {fg: $p.path attr: b})($full_dir)(ansi reset)($git_txt)"
+        }
+        "8bit" => {
+            # pixel gradient separators ░▒▓
+            let g = (git-info)
+            let grad = $"(ansi {fg: $p.sep})░▒▓(ansi reset)"
+            let gitp = if $g.present { $"($grad)(ansi {fg: $p.git attr: b})(git-plain $g)(ansi reset)" } else { "" }
+            $"(ansi {fg: $p.user attr: b})(prompt-user)($grad)(ansi {fg: $p.path attr: b})($full_dir)(ansi reset)($gitp)"
+        }
         "capsule" => {
             let lc = (char --unicode e0b6)
             let rc = (char --unicode e0b4)
@@ -989,10 +1026,13 @@ def prompt-indicator [] {
     let glyph = match $style {
         "cyberpunk" => "▶▶▶"
         "lambda" => "λ"
+        "mario" => "▶"
+        "arcade" => "▮▮"
+        "8bit" => "█"
         _ => "❯"
     }
     let color = if $ok {
-        if $style in ["cyberpunk" "pure"] { $p.git } else { $p.ok }
+        if $style in ["cyberpunk" "pure"] { $p.git } else if $style in ["mario" "arcade" "8bit"] { $p.modified } else { $p.ok }
     } else { $p.err }
     $"(ansi {fg: $color attr: b})($glyph) (ansi reset)"
 }
