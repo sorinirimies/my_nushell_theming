@@ -25,15 +25,18 @@ Sleep 1.8s
 Type "ls | first 3"
 Enter
 Sleep 2.2s
+Type "look monokai-rainbow"
+Enter
+Sleep 2.2s
+Type "look ayu-arrow"
+Enter
+Sleep 2.2s
 Type "look tokyo-powerline"
 Enter
 Sleep 2.2s
-Type "look dracula-slant"
+Type "look oxocarbon-rainbow"
 Enter
 Sleep 2.2s
-Type "look everforest-boxed"
-Enter
-Sleep 2.4s
 Type "look gruvbox"
 Enter
 Sleep 2.4s
