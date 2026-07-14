@@ -123,6 +123,13 @@ Light themes (`github-light`, `catppuccin-latte`, `rose-pine-dawn`,
 
 ![prompt styles](docs/styles.gif)
 
+### Ghostty auto-follow
+
+Pin any theme to override Ghostty; `theme-sync` re-follows Ghostty's current
+theme (falling back to `gruvbox`):
+
+![theme-sync](docs/sync.gif)
+
 Game-inspired styles — try `look super-mario`, `look arcade`, or `look 8bit`:
 
 ![game styles](docs/games.gif)
