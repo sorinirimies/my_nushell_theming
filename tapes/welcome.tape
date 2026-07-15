@@ -13,6 +13,10 @@ Set TypingSpeed 55ms
 Hide
 Type "$env.PROMPT_COMMAND = { || create_left_prompt }"
 Enter
+Type "$env.PROMPT_USER = 'sorin'"
+Enter
+Type "$env.PROMPT_HOST = 'nuance'"
+Enter
 Type "look cyberpunk"
 Enter
 Type "clear"

@@ -1,0 +1,32 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: test (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Nushell
+        uses: hustcer/setup-nu@v3
+        with:
+          version: "0.111.0"
+
+      - name: Run tests
+        shell: bash
+        run: nu test.nu
+
+      - name: Verify install (symlink into autoload)
+        shell: bash
+        run: |
+          nu install.nu
+          nu -n -c "source (($nu.user-autoload-dirs | get 0) | path join 'nushell-prompt.nu'); print $'loaded ((theme-list | length)) themes'"

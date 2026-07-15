@@ -637,8 +637,42 @@ def --env look [name?: string] {
 # List available looks.
 def looks [] { presets | select name theme style }
 
+# Swatch of every theme's palette (one row each) — see all colors at a glance.
+def theme-preview [] {
+    let names = (theme-list)
+    let w = ($names | each { str length } | math max)
+    let keys = [err host modified ok ahead path git user]
+    for t in $names {
+        let p = (theme-get $t).palette
+        let sw = ($keys | each {|k| $"(ansi {fg: ($p | get $k)})███(ansi reset)" } | str join "")
+        print $"($t | fill --alignment left --width $w)  ($sw)"
+    }
+}
+
+# Render every prompt style once (using the current theme), stacked + labelled.
+def style-preview [] {
+    let saved = ($env.PROMPT_STYLE? | default "full")
+    let sep = (($env.THEME_PALETTE? | default {}).sep? | default "#808080")
+    for s in (prompt-styles) {
+        $env.PROMPT_STYLE = $s
+        print $"(ansi {fg: $sep})($s)(ansi reset)"
+        print (create_left_prompt)
+        print ""
+    }
+    $env.PROMPT_STYLE = $saved
+}
+
 # Read Ghostty's active theme and map it to a nushell theme name.
 # Returns null when it can't be determined.
+# Detect OS dark mode (macOS `defaults`, GNOME `gsettings`); default dark.
+def os-dark-mode [] {
+    let mac = (do -i { ^defaults read -g AppleInterfaceStyle } | complete)
+    if $mac.exit_code == 0 { return ($mac.stdout | str downcase | str contains "dark") }
+    let gnome = (do -i { ^gsettings get org.gnome.desktop.interface color-scheme } | complete)
+    if $gnome.exit_code == 0 { return ($gnome.stdout | str downcase | str contains "dark") }
+    true
+}
+
 def ghostty-theme-name [] {
     let cfgs = [
         ($env.HOME | path join ".config" "ghostty" "config")
@@ -657,7 +691,7 @@ def ghostty-theme-name [] {
 
     # Ghostty supports  theme = light:NAME,dark:NAME  — pick per OS appearance.
     if ($val | str contains ":") {
-        let dark = (try { (^defaults read -g AppleInterfaceStyle | str trim) == "Dark" } catch { true })
+        let dark = (os-dark-mode)
         let want = (if $dark { "dark" } else { "light" })
         let seg = ($val | split row "," | where {|s| $s | str trim | str downcase | str starts-with $want } | get 0?)
         if ($seg | is-not-empty) { $val = ($seg | split row ":" | last | str trim) }
@@ -848,6 +882,7 @@ def git-segment [--counts] {
 # Username / hostname that don't break the prompt in minimal environments
 # (e.g. ttyd/VHS where `whoami` may fail).
 def prompt-user [] {
+    if (($env.PROMPT_USER? | default "") | is-not-empty) { return $env.PROMPT_USER }
     let u = ($env.USER? | default ($env.USERNAME? | default ""))
     if ($u | is-not-empty) { $u } else {
         let w = (do -i { whoami } | complete | get stdout | str trim)
@@ -855,6 +890,7 @@ def prompt-user [] {
     }
 }
 def prompt-host [] {
+    if (($env.PROMPT_HOST? | default "") | is-not-empty) { return $env.PROMPT_HOST }
     try { sys host | get hostname } catch { ($env.HOSTNAME? | default "host") }
 }
 

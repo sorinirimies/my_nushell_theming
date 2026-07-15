@@ -5,6 +5,7 @@
 ![themes](https://img.shields.io/badge/themes-26-cba6f7)
 ![styles](https://img.shields.io/badge/prompt%20styles-16-89b4fa)
 ![license](https://img.shields.io/badge/license-MIT-green)
+![ci](https://github.com/sorinirimies/nuance/actions/workflows/ci.yml/badge.svg)
 
 **nuance** *(a portmanteau of **nu** + **nuance** — the subtle differences
 between colors)* is a themeable, git-aware prompt for
@@ -113,12 +114,20 @@ theme                 # pick a theme, THEN a prompt style (interactive)
 theme nord            # set + pin a theme only
 theme-sync            # re-enable Ghostty auto-follow
 theme-list
+theme-preview         # color swatch of every theme
 
 prompt-style          # change ONLY the prompt style
 prompt-style capsule
+style-preview         # render every style once, on the current theme
 ```
 
 ### Themes
+
+Every theme at a glance (`theme-preview`):
+
+![theme gallery](docs/gallery-themes.gif)
+
+And cycling through a few with recolored tables:
 
 ![themes gallery](docs/themes.gif)
 
@@ -145,6 +154,10 @@ Light themes (`github-light`, `catppuccin-latte`, `rose-pine-dawn`,
 | `nord-lambda`      | nord                 | lambda    |
 
 ### Styles
+
+Every prompt style at once (`style-preview`):
+
+![style gallery](docs/gallery-styles.gif)
 
 ![prompt styles](docs/styles.gif)
 
@@ -181,6 +194,24 @@ Game-inspired styles — try `look super-mario`, `look arcade`, or `look 8bit`:
 ### Toggles
 
 - `$env.PROMPT_NERD` — `true`/`false`, use Nerd Font glyphs (default `true`).
+- `$env.PROMPT_USER` / `$env.PROMPT_HOST` — override the shown username/hostname
+  (handy for screenshots/recordings, or a custom label).
+
+## Cross-platform
+
+One pure-Nushell file, no OS-specific dependencies — the same script runs on
+**macOS** and **Linux** (and WSL). Paths are resolved via Nushell built-ins
+(`$nu.user-autoload-dirs`, `$nu.default-config-dir`), the Ghostty config is
+found at `~/.config/ghostty/config` **or** the macOS
+`~/Library/Application Support/com.mitchellh.ghostty/config`, and light/dark
+detection uses macOS `defaults` or GNOME `gsettings` (falling back to dark).
+
+A test suite (`nu test.nu`) validates that every theme, style and look is
+well-formed and the prompt renders; it runs in CI on both Ubuntu and macOS.
+
+```sh
+nu test.nu   # ✓ all checks passed — 26 themes, 16 styles, 25 looks
+```
 
 ## How it works
 

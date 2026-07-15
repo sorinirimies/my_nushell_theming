@@ -14,6 +14,10 @@ Set Theme { "background": "#f6f6f8", "foreground": "#3a3a48" }
 Hide
 Type "$env.PROMPT_COMMAND = { || create_left_prompt }"
 Enter
+Type "$env.PROMPT_USER = 'sorin'"
+Enter
+Type "$env.PROMPT_HOST = 'nuance'"
+Enter
 Type "prompt-style compact"
 Enter
 Type "clear"
