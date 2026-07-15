@@ -1,4 +1,4 @@
-# nushell-prompt
+# nuance
 
 ![platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-blue)
 ![nushell](https://img.shields.io/badge/nushell-%E2%89%A50.101-4E9A06)
@@ -6,11 +6,36 @@
 ![styles](https://img.shields.io/badge/prompt%20styles-16-89b4fa)
 ![license](https://img.shields.io/badge/license-MIT-green)
 
-A themeable, git-aware [Nushell](https://www.nushell.sh) prompt with multiple
-color themes and switchable layout styles — including a neon **cyberpunk** one.
-Works on **macOS** and **Linux**.
+**nuance** *(a portmanteau of **nu** + **nuance** — the subtle differences
+between colors)* is a themeable, git-aware prompt for
+[Nushell](https://www.nushell.sh), shipped as a single drop-in file. Switch
+between **26 color themes** and **16 prompt styles**, combine them into named
+**looks**, and optionally let the whole shell **follow your terminal's theme**
+automatically. Works on **macOS** and **Linux**.
 
-![nushell-prompt demo](docs/welcome.gif)
+![nuance demo](docs/welcome.gif)
+
+## What is it?
+
+`nuance` is a self-contained Nushell script that replaces the default prompt
+with a richer, colorful one and adds a few commands to restyle your shell on
+the fly. Concretely, it gives you:
+
+- **Color themes** that recolor Nushell's syntax highlighting, table output,
+  **and** the prompt in one coordinated palette (gruvbox, catppuccin, tokyo
+  night, dracula, nord, a neon cyberpunk, even a Super Mario one, …).
+- **Prompt styles** — different *layouts* for the prompt line (minimal,
+  powerline, two-line boxed, retro game styles, …), independent of the colors.
+- **Looks** — curated theme + style pairings you apply in one step.
+- A **git segment** in the prompt showing branch, ahead/behind, staged,
+  modified, untracked, stashed and conflict counts — like oh-my-zsh.
+- **Ghostty auto-follow**: on startup it can read your
+  [Ghostty](https://ghostty.org) terminal's theme and match it, so your shell
+  and terminal always agree. Pin a theme to override it; `theme-sync` re-follows.
+
+It installs into Nushell's autoload directory, so it loads automatically
+without editing your `config.nu`, and nothing runs but a prompt — no daemons,
+no external dependencies.
 
 ## Features
 
@@ -50,8 +75,8 @@ Requires [Nushell](https://www.nushell.sh) — the installer is pure Nushell,
 no bash needed.
 
 ```sh
-git clone https://github.com/sorinirimies/my_nushell_theming
-cd my_nushell_theming
+git clone https://github.com/sorinirimies/nuance
+cd nuance
 nu install.nu            # symlink (repo stays the source of truth)
 # or:  nu install.nu --copy
 ```
@@ -59,7 +84,7 @@ nu install.nu            # symlink (repo stays the source of truth)
 One-liner (no clone needed):
 
 ```sh
-nu -c "let d = (mktemp -d); http get https://raw.githubusercontent.com/sorinirimies/my_nushell_theming/main/install.nu | save ($d | path join install.nu); nu ($d | path join install.nu)"
+nu -c "let d = (mktemp -d); http get https://raw.githubusercontent.com/sorinirimies/nuance/main/install.nu | save ($d | path join install.nu); nu ($d | path join install.nu)"
 ```
 
 Open a new shell (or `exec nu`). That's it.

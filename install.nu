@@ -1,5 +1,5 @@
 #!/usr/bin/env nu
-# install.nu — cross-platform deploy for my_nushell_theming.
+# install.nu — cross-platform deploy for nuance.
 # Pure Nushell; works anywhere Nushell runs (macOS / Linux / Windows / WSL).
 #
 # From a clone:
@@ -7,16 +7,16 @@
 #   nu install.nu --copy     # copy instead of symlinking
 #
 # One-liner (no clone needed):
-#   nu -c "let d = (mktemp -d); http get https://raw.githubusercontent.com/sorinirimies/my_nushell_theming/main/install.nu | save ($d | path join install.nu); nu ($d | path join install.nu)"
+#   nu -c "let d = (mktemp -d); http get https://raw.githubusercontent.com/sorinirimies/nuance/main/install.nu | save ($d | path join install.nu); nu ($d | path join install.nu)"
 
-const REPO_URL = "https://github.com/sorinirimies/my_nushell_theming.git"
+const REPO_URL = "https://github.com/sorinirimies/nuance.git"
 const FILE = "nushell-prompt.nu"
 
 # Find the source file next to this script, or clone the repo if run standalone.
 def resolve-source []: nothing -> string {
     let here = ($env.FILE_PWD | path join $FILE)
     if ($here | path exists) { return $here }
-    let cache = ($env.XDG_CACHE_HOME? | default ($env.HOME | path join ".cache") | path join "my_nushell_theming")
+    let cache = ($env.XDG_CACHE_HOME? | default ($env.HOME | path join ".cache") | path join "nuance")
     print $"(ansi cyan)fetching(ansi reset) ($REPO_URL) ..."
     rm -rf $cache
     ^git clone --depth 1 $REPO_URL $cache
@@ -29,7 +29,7 @@ def main [--copy] {
     let target = ($dest | path join $FILE)
 
     mkdir $dest
-    print $"(ansi green_bold)my_nushell_theming(ansi reset) → ($dest)"
+    print $"(ansi green_bold)nuance(ansi reset) → ($dest)"
 
     if (($target | path exists) or (($target | path type) == "symlink")) { rm -f $target }
     if $copy {
