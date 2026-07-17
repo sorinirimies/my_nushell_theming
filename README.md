@@ -10,7 +10,7 @@
 **nuance** *(a portmanteau of **nu** + **nuance** — the subtle differences
 between colors)* is a themeable, git-aware prompt for
 [Nushell](https://www.nushell.sh), shipped as a single drop-in file. Switch
-between **26 color themes** and **16 prompt styles**, combine them into named
+between **26 color themes** and **21 prompt styles**, combine them into named
 **looks**, and optionally let the whole shell **follow your terminal's theme**
 automatically. Works on **macOS** and **Linux**.
 
@@ -89,9 +89,10 @@ no external dependencies.
   config (`theme = …`), matched automatically. Pick a theme manually with
   `theme <name>` to **pin** it (survives new shells); `theme-sync` re-enables
   auto-follow.
-- **16 prompt styles**: `full`, `compact`, `minimal`, `lambda`, `pure`,
+- **21 prompt styles**: `full`, `compact`, `minimal`, `lambda`, `pure`,
   `bracket`, `arrow`, `powerline`, `slant`, `capsule`, `rainbow`, `boxed`,
-  `mario`, `arcade`, `8bit`, `cyberpunk`.
+  `cyberpunk`, game-inspired `mario`/`arcade`/`8bit`, and oh-my-zsh classics
+  `robbyrussell`/`ys`/`avit`/`bira`/`af-magic`.
 - **oh-my-zsh style git info**: branch, `⇡`ahead `⇣`behind `=`conflict
   `+`staged `!`modified `?`untracked `*`stash, `✔` clean.
 - **Command duration** (for commands > 2s) and an **exit-status-aware** prompt
@@ -191,6 +192,11 @@ Game-inspired styles — try `look super-mario`, `look arcade`, or `look 8bit`:
 | `minimal`   | `dirname on  branch`                                       |
 | `lambda`    | `λ ~/path on  branch +git`                                 |
 | `pure`      | two-line, [pure](https://github.com/sindresorhus/pure)-like |
+| `robbyrussell` | oh-my-zsh's default — `➜  dir git:(branch) ✗`             |
+| `ys`        | oh-my-zsh `ys` — `# user @ host in ~/dir on ⎇ branch●`      |
+| `avit`      | oh-my-zsh `avit` — clean two-line + `git:(branch)`          |
+| `bira`      | oh-my-zsh `bira` — `╭─user@host ~/dir` / `╰─➤`               |
+| `af-magic`  | oh-my-zsh `af-magic` — full-width rule + info line          |
 | `bracket`   | ASCII `[user@host] [path] [git]` (no Nerd Font needed)       |
 | `arrow`     | `user » path » git` — no Nerd Font needed                    |
 | `powerline` | Nerd-Font segments with `` separators                     |
