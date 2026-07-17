@@ -7,7 +7,7 @@
 #   nu install.nu --copy     # copy instead of symlinking
 #
 # One-liner (no clone needed):
-#   nu -c "let d = (mktemp -d); http get https://raw.githubusercontent.com/sorinirimies/nuance/main/install.nu | save ($d | path join install.nu); nu ($d | path join install.nu)"
+#   nu -c 'http get https://raw.githubusercontent.com/sorinirimies/nuance/main/install.nu | save -f /tmp/nuance-install.nu; nu /tmp/nuance-install.nu'
 
 const REPO_URL = "https://github.com/sorinirimies/nuance.git"
 const FILE = "nushell-prompt.nu"

@@ -85,7 +85,7 @@ nu install.nu            # symlink (repo stays the source of truth)
 One-liner (no clone needed):
 
 ```sh
-nu -c "let d = (mktemp -d); http get https://raw.githubusercontent.com/sorinirimies/nuance/main/install.nu | save ($d | path join install.nu); nu ($d | path join install.nu)"
+nu -c 'http get https://raw.githubusercontent.com/sorinirimies/nuance/main/install.nu | save -f /tmp/nuance-install.nu; nu /tmp/nuance-install.nu'
 ```
 
 Open a new shell (or `exec nu`). That's it.
