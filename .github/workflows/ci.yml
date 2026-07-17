@@ -7,11 +7,12 @@ on:
 
 jobs:
   test:
-    name: test (${{ matrix.os }})
+    name: test (${{ matrix.os }}, nu ${{ matrix.nu }})
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
+        nu: ["0.111.0", "0.114.1"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +20,7 @@ jobs:
       - name: Install Nushell
         uses: hustcer/setup-nu@v3
         with:
-          version: "0.111.0"
+          version: ${{ matrix.nu }}
 
       - name: Run tests
         shell: bash

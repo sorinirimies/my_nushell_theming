@@ -667,9 +667,9 @@ def style-preview [] {
 # Detect OS dark mode (macOS `defaults`, GNOME `gsettings`); default dark.
 def os-dark-mode [] {
     let mac = (do -i { ^defaults read -g AppleInterfaceStyle } | complete)
-    if $mac.exit_code == 0 { return ($mac.stdout | str downcase | str contains "dark") }
+    if $mac.exit_code == 0 { return ($mac.stdout | str contains --ignore-case "dark") }
     let gnome = (do -i { ^gsettings get org.gnome.desktop.interface color-scheme } | complete)
-    if $gnome.exit_code == 0 { return ($gnome.stdout | str downcase | str contains "dark") }
+    if $gnome.exit_code == 0 { return ($gnome.stdout | str contains --ignore-case "dark") }
     true
 }
 
@@ -683,7 +683,7 @@ def ghostty-theme-name [] {
 
     let line = (
         open $file | lines
-        | where {|l| ($l | str trim | str downcase | str starts-with "theme") and ($l | str contains "=") }
+        | where {|l| ($l | str trim | str starts-with --ignore-case "theme") and ($l | str contains "=") }
         | get 0?
     )
     if ($line | is-empty) { return null }
@@ -693,37 +693,37 @@ def ghostty-theme-name [] {
     if ($val | str contains ":") {
         let dark = (os-dark-mode)
         let want = (if $dark { "dark" } else { "light" })
-        let seg = ($val | split row "," | where {|s| $s | str trim | str downcase | str starts-with $want } | get 0?)
+        let seg = ($val | split row "," | where {|s| $s | str trim | str starts-with --ignore-case $want } | get 0?)
         if ($seg | is-not-empty) { $val = ($seg | split row ":" | last | str trim) }
     }
 
-    let low = ($val | str downcase)
-    if ($low | str contains "gruvbox") { "gruvbox"
-    } else if ($low | str contains "mocha") { "catppuccin-mocha"
-    } else if ($low | str contains "macchiato") { "catppuccin-macchiato"
-    } else if ($low | str contains "frappe") { "catppuccin-frappe"
-    } else if ($low | str contains "latte") { "catppuccin-latte"
-    } else if ($low | str contains "tokyo") { "tokyo-night"
-    } else if ($low | str contains "nord") { "nord"
-    } else if ($low | str contains "dracula") { "dracula"
-    } else if (($low | str contains "rose") or ($low | str contains "ros\u{e9}")) {
-        if ($low | str contains "dawn") { "rose-pine-dawn"
-        } else if ($low | str contains "moon") { "rose-pine-moon"
+    let low = $val
+    if ($low | str contains --ignore-case "gruvbox") { "gruvbox"
+    } else if ($low | str contains --ignore-case "mocha") { "catppuccin-mocha"
+    } else if ($low | str contains --ignore-case "macchiato") { "catppuccin-macchiato"
+    } else if ($low | str contains --ignore-case "frappe") { "catppuccin-frappe"
+    } else if ($low | str contains --ignore-case "latte") { "catppuccin-latte"
+    } else if ($low | str contains --ignore-case "tokyo") { "tokyo-night"
+    } else if ($low | str contains --ignore-case "nord") { "nord"
+    } else if ($low | str contains --ignore-case "dracula") { "dracula"
+    } else if (($low | str contains --ignore-case "rose") or ($low | str contains --ignore-case "ros\u{e9}")) {
+        if ($low | str contains --ignore-case "dawn") { "rose-pine-dawn"
+        } else if ($low | str contains --ignore-case "moon") { "rose-pine-moon"
         } else { "rose-pine" }
-    } else if ($low | str contains "everforest") { "everforest"
-    } else if ($low | str contains "kanagawa") { "kanagawa"
-    } else if (($low | str contains "one") and ($low | str contains "dark")) { "onedark"
-    } else if ($low | str contains "monokai") { "monokai"
-    } else if ($low | str contains "mirage") { "ayu-mirage"
-    } else if ($low | str contains "ayu") { "ayu-dark"
-    } else if (($low | str contains "night") and ($low | str contains "owl")) { "night-owl"
-    } else if (($low | str contains "github") and ($low | str contains "light")) { "github-light"
-    } else if ($low | str contains "github") { "github-dark"
-    } else if ($low | str contains "oxocarbon") { "oxocarbon"
-    } else if ($low | str contains "zenburn") { "zenburn"
-    } else if ($low | str contains "mario") { "super-mario"
-    } else if (($low | str contains "solarized") and ($low | str contains "light")) { "solarized-light"
-    } else if ($low | str contains "solarized") { "solarized"
+    } else if ($low | str contains --ignore-case "everforest") { "everforest"
+    } else if ($low | str contains --ignore-case "kanagawa") { "kanagawa"
+    } else if (($low | str contains --ignore-case "one") and ($low | str contains --ignore-case "dark")) { "onedark"
+    } else if ($low | str contains --ignore-case "monokai") { "monokai"
+    } else if ($low | str contains --ignore-case "mirage") { "ayu-mirage"
+    } else if ($low | str contains --ignore-case "ayu") { "ayu-dark"
+    } else if (($low | str contains --ignore-case "night") and ($low | str contains --ignore-case "owl")) { "night-owl"
+    } else if (($low | str contains --ignore-case "github") and ($low | str contains --ignore-case "light")) { "github-light"
+    } else if ($low | str contains --ignore-case "github") { "github-dark"
+    } else if ($low | str contains --ignore-case "oxocarbon") { "oxocarbon"
+    } else if ($low | str contains --ignore-case "zenburn") { "zenburn"
+    } else if ($low | str contains --ignore-case "mario") { "super-mario"
+    } else if (($low | str contains --ignore-case "solarized") and ($low | str contains --ignore-case "light")) { "solarized-light"
+    } else if ($low | str contains --ignore-case "solarized") { "solarized"
     } else { null }
 }
 
@@ -989,7 +989,7 @@ def create_left_prompt [] {
         "arcade" => {
             # retro all-caps score/1UP vibe
             let g = (git-info)
-            let git_txt = if $g.present { $" (ansi {fg: $p.sep})‹(ansi {fg: $p.git attr: b})(git-plain $g | str upcase)(ansi {fg: $p.sep})›(ansi reset)" } else { "" }
+            let git_txt = if $g.present { $" (ansi {fg: $p.sep})‹(ansi {fg: $p.git attr: b})(git-plain $g)(ansi {fg: $p.sep})›(ansi reset)" } else { "" }
             $"(ansi {fg: $p.modified attr: b})▶ 1UP(ansi reset) (ansi {fg: $p.path attr: b})($full_dir)(ansi reset)($git_txt)"
         }
         "8bit" => {
