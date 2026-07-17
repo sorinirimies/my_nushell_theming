@@ -696,31 +696,8 @@ def os-dark-mode [] {
     true
 }
 
-def ghostty-theme-name [] {
-    let cfgs = [
-        ($env.HOME | path join ".config" "ghostty" "config")
-        ($env.HOME | path join "Library" "Application Support" "com.mitchellh.ghostty" "config")
-    ]
-    let file = ($cfgs | where {|p| $p | path exists } | get 0? )
-    if ($file | is-empty) { return null }
-
-    let line = (
-        open $file | lines
-        | where {|l| ($l | str trim | str starts-with --ignore-case "theme") and ($l | str contains "=") }
-        | get 0?
-    )
-    if ($line | is-empty) { return null }
-    mut val = ($line | str replace -r '^\s*[Tt]heme\s*=\s*' '' | str trim)
-
-    # Ghostty supports  theme = light:NAME,dark:NAME  — pick per OS appearance.
-    if ($val | str contains ":") {
-        let dark = (os-dark-mode)
-        let want = (if $dark { "dark" } else { "light" })
-        let seg = ($val | split row "," | where {|s| $s | str trim | str starts-with --ignore-case $want } | get 0?)
-        if ($seg | is-not-empty) { $val = ($seg | split row ":" | last | str trim) }
-    }
-
-    let low = $val
+# Map a raw theme name (from Ghostty or anywhere) to a nuance theme, or null.
+def ghostty-map-name [low: string] {
     if ($low | str contains --ignore-case "gruvbox") { "gruvbox"
     } else if ($low | str contains --ignore-case "mocha") { "catppuccin-mocha"
     } else if ($low | str contains --ignore-case "macchiato") { "catppuccin-macchiato"
@@ -748,6 +725,33 @@ def ghostty-theme-name [] {
     } else if (($low | str contains --ignore-case "solarized") and ($low | str contains --ignore-case "light")) { "solarized-light"
     } else if ($low | str contains --ignore-case "solarized") { "solarized"
     } else { null }
+}
+
+def ghostty-theme-name [] {
+    let cfgs = [
+        ($env.HOME | path join ".config" "ghostty" "config")
+        ($env.HOME | path join "Library" "Application Support" "com.mitchellh.ghostty" "config")
+    ]
+    let file = ($cfgs | where {|p| $p | path exists } | get 0? )
+    if ($file | is-empty) { return null }
+
+    let line = (
+        open $file | lines
+        | where {|l| ($l | str trim | str starts-with --ignore-case "theme") and ($l | str contains "=") }
+        | get 0?
+    )
+    if ($line | is-empty) { return null }
+    mut val = ($line | str replace -r '^\s*[Tt]heme\s*=\s*' '' | str trim)
+
+    # Ghostty supports  theme = light:NAME,dark:NAME  — pick per OS appearance.
+    if ($val | str contains ":") {
+        let dark = (os-dark-mode)
+        let want = (if $dark { "dark" } else { "light" })
+        let seg = ($val | split row "," | where {|s| $s | str trim | str starts-with --ignore-case $want } | get 0?)
+        if ($seg | is-not-empty) { $val = ($seg | split row ":" | last | str trim) }
+    }
+
+    ghostty-map-name $val
 }
 
 # Re-adopt Ghostty's current theme in this session.

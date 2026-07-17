@@ -156,6 +156,11 @@ And cycling through a few with recolored tables:
 
 ![themes gallery](docs/themes.gif)
 
+…and more of the newer themes (nord, rosé pine, everforest, kanagawa, ayu,
+onedark, solarized, super-mario):
+
+![more themes](docs/themes-more.gif)
+
 Light themes (`github-light`, `catppuccin-latte`, `rose-pine-dawn`,
 `solarized-light`) shine on a light terminal background:
 
