@@ -25,7 +25,11 @@ styles**, combine them into named **looks**, and optionally let the shell
 curl -fsSL https://raw.githubusercontent.com/sorinirimies/nuance/main/bootstrap.sh | bash
 ```
 
-<sub>…or `wget -qO- https://raw.githubusercontent.com/sorinirimies/nuance/main/bootstrap.sh | bash`</sub>
+…or with `wget`:
+
+```sh
+wget -qO- https://raw.githubusercontent.com/sorinirimies/nuance/main/bootstrap.sh | bash
+```
 
 The bootstrap installs Nushell via your package manager (Homebrew / apt /
 pacman / dnf / zypper / cargo) or a prebuilt binary, then wires up the prompt.
