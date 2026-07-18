@@ -9,5 +9,7 @@ def main [] {
     } else {
         print "nothing to remove."
     }
+    let cli = ($env.HOME | path join ".local" "bin" "nuance")
+    if (($cli | path exists) or ($cli | path type) == "symlink") { rm -f $cli; print $"removed ($cli)" }
     print "Done. Restart your shell. (State files current-theme.txt / prompt-style.txt are left in place.)"
 }

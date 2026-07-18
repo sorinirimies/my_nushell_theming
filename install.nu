@@ -40,8 +40,22 @@ def main [--copy] {
         print $"  (ansi cyan)linked(ansi reset)  ($FILE) -> ($src)"
     }
 
+    # Install the `nuance` CLI so `nuance update` works from any shell too.
+    let cli_src = ($src | path dirname | path join "bin" "nuance")
+    if ($cli_src | path exists) {
+        let bindir = ($env.HOME | path join ".local" "bin")
+        mkdir $bindir
+        let cli_target = ($bindir | path join "nuance")
+        if (($cli_target | path exists) or (($cli_target | path type) == "symlink")) { rm -f $cli_target }
+        if $copy { cp $cli_src $cli_target } else { ^ln -s $cli_src $cli_target }
+        ^chmod +x $cli_target
+        print $"  (ansi cyan)cli(ansi reset)     nuance -> ($cli_target)"
+        if (not ($env.PATH | any {|p| $p == $bindir })) {
+            print $"  (ansi yellow)note(ansi reset)    add ($bindir) to your shell PATH to use `nuance` outside Nushell"
+        }
+    }
+
     print ""
     print $"(ansi green_bold)✓ installed.(ansi reset) Open a new shell, or run: (ansi attr_bold)exec nu(ansi reset)"
-    print "Try:  theme cyberpunk   ·   prompt-style cyberpunk"
-    print "Also: theme · theme-sync · prompt-style"
+    print "Try:  theme cyberpunk   ·   prompt-style cyberpunk   ·   nuance update"
 }

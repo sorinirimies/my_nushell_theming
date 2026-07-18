@@ -62,7 +62,7 @@ if ((git-omz $gclean | ansi strip) | str contains "✗") { $errors = ($errors | 
 
 # ── public commands are defined ──
 let cmds = (scope commands | get name)
-for c in ["theme" "theme-sync" "prompt-style" "look" "looks" "theme-preview" "style-preview" "nuance-update"] {
+for c in ["theme" "theme-sync" "prompt-style" "look" "looks" "theme-preview" "style-preview" "nuance" "nuance update"] {
     if ($c not-in $cmds) { $errors = ($errors | append $"command not defined: ($c)") }
 }
 

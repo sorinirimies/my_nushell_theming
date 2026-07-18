@@ -62,7 +62,7 @@ prompt-style           # pick a layout (interactive)
 prompt-style capsule   # …or set one by name
 style-preview          # render all 22 styles
 
-nuance-update          # git pull the checkout, then: exec nu
+nuance update          # git pull the checkout, then: exec nu
 ```
 
 Pick interactively — `theme`/`prompt-style`/`look` open a fuzzy picker:
@@ -90,8 +90,11 @@ By default the theme follows your [Ghostty](https://ghostty.org) config
 
 ## Updating
 
-```nu
-nuance-update      # pulls the checkout; then run: exec nu
+Run **`nuance update`** — it works both inside Nushell (built-in command) and
+in any normal shell (a `nuance` CLI is installed to `~/.local/bin`):
+
+```sh
+nuance update      # pulls the checkout; then run: exec nu
 ```
 
 Or `cd` into the repo and `git pull` (symlink installs apply on the next

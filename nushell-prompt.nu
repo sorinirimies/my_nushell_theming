@@ -670,7 +670,8 @@ def style-preview [] {
 
 # Update nuance in place. If installed as a symlink to a git checkout, this
 # pulls the latest and reloads; otherwise it points you at the reinstall.
-def nuance-update [] {
+# nuance CLI (also available as a POSIX `nuance` in ~/.local/bin for other shells)
+def "nuance update" [] {
     let link = ($nu.user-autoload-dirs | get 0 | path join "nushell-prompt.nu")
     if not ($link | path exists) { print $"(ansi red)nuance is not installed(ansi reset) at ($link)"; return }
     let real = ($link | path expand)          # resolves the symlink
@@ -683,6 +684,16 @@ def nuance-update [] {
         print $"(ansi yellow)copy install detected(ansi reset) \(($repo)) — re-run the installer to update:"
         print "  curl -fsSL https://raw.githubusercontent.com/sorinirimies/nuance/main/bootstrap.sh | bash"
     }
+}
+
+def nuance [] {
+    print $"(ansi green_bold)nuance(ansi reset) — themeable, git-aware Nushell prompt"
+    print ""
+    print "  nuance update           pull the latest, then: exec nu"
+    print "  theme [name]            switch/pin a color theme  (theme-preview)"
+    print "  prompt-style [name]     switch the prompt layout   (style-preview)"
+    print "  look [name]             apply a theme + style preset (looks)"
+    print "  theme-sync              re-follow the Ghostty terminal theme"
 }
 
 # Read Ghostty's active theme and map it to a nushell theme name.
