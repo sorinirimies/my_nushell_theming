@@ -701,19 +701,31 @@ def "nuance help" [] {
     print "Previews:   theme-preview · style-preview"
 }
 
-# `nuance theme` — no name shows every theme; a name sets + pins it.
+# `nuance theme` — no name opens a swatch selector; a name sets + pins it.
 def --env "nuance theme" [name?: string] {
-    if ($name | is-empty) { theme-preview } else { theme $name }
+    if ($name | is-not-empty) { theme $name; return }
+    let items = (theme-list | each {|t|
+        let p = (theme-get $t).palette
+        let sw = ([$p.err $p.host $p.modified $p.ok $p.ahead $p.path $p.git $p.user] | each {|c| $"(ansi {fg: $c})██(ansi reset)" } | str join "")
+        $"($t | fill --alignment left --width 22) ($sw)"
+    })
+    let choice = ($items | input list "select a theme  (↑↓, enter)")
+    if ($choice | is-empty) { return }
+    theme ($choice | ansi strip | str trim | split row " " | first)
 }
 
-# `nuance prompt-style` — no name shows every style; a name sets it.
+# `nuance prompt-style` — no name opens a selector; a name sets it.
 def --env "nuance prompt-style" [name?: string] {
-    if ($name | is-empty) { style-preview } else { prompt-style $name }
+    if ($name | is-not-empty) { prompt-style $name; return }
+    let choice = (prompt-styles | input list "select a prompt style  (↑↓, enter)")
+    if ($choice | is-not-empty) { prompt-style $choice }
 }
 
-# `nuance look` — no name lists looks; a name applies one.
+# `nuance look` — no name opens a selector; a name applies one.
 def --env "nuance look" [name?: string] {
-    if ($name | is-empty) { looks } else { look $name }
+    if ($name | is-not-empty) { look $name; return }
+    let choice = (presets | get name | input list "select a look  (↑↓, enter)")
+    if ($choice | is-not-empty) { look $choice }
 }
 
 # Read Ghostty's active theme and map it to a nushell theme name.
